@@ -24,7 +24,7 @@ abstract class Controller
             "code"=>$code,
             "message"=>$message,
             "data"=>$data
-        ]);
+        ], $code);
     }
 
 

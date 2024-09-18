@@ -3,63 +3,98 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vacancy;
+use App\Models\VacancyComponents;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VacancyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function createVacancy(Request $request)
     {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        try {
+            DB::beginTransaction();
+            $vacancy = Vacancy::create([
+                "uuid" => $this->generateUuid(),
+                "title" => $request->title,
+                "description" => $request->description,
+                "user_id"=>  1,
+                "sector_id" => $request->sector_id,
+                "category_id" => $request->category_id,
+                "expires_on" => $request->expires_on,
+                "status" => $request->status,
+                "location" => $request->location,
+                "department" => $request->department,
+                "employment_type" => $request->employment_type,
+                "job_type_id" => $request->job_type_id,
+                "footer" => $request->footer,
+                "branch_id"=>1,
+                "company_id"=>1,
+                "experience" => $request->experience,
+                "start_on" => $request->start_on,
+                "ends_on" => $request->ends_on,
+                "created_by"=>1,
+                "created_on" => Carbon::now(),
+            ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Vacancy $vacancy)
-    {
-        //
-    }
+            // // Adding Requirements
+            // foreach ($request->requirements as $key => $value) {
+            //     $component = VacancyComponents::create([
+            //         "uuid" => $this->generateUuid(),
+            //         "vacancy_id" => $vacancy->id,
+            //         "ind" => "REQUIREMENT",
+            //         "status" => "Active",
+            //         "description" => $value['description'],
+            //         // "created_by"=>$request->created_by,
+            //         "created_on" => Carbon::now(),
+            //     ]);
+            // }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vacancy $vacancy)
-    {
-        //
-    }
+            // // Adding roles and responsibilities
+            // foreach ($request->roles_and_responsibilities as $key => $value) {
+            //     $component = VacancyComponents::create([
+            //         "uuid" => $this->generateUuid(),
+            //         "vacancy_id" => $vacancy->id,
+            //         "ind" => "ROLES_AND_RESPONSIBLY",
+            //         "status" => "Active",
+            //         "description" => $value['description'],
+            //         // "created_by"=>$request->created_by,
+            //         "created_on" => Carbon::now(),
+            //     ]);
+            // }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Vacancy $vacancy)
-    {
-        //
-    }
+            // // Adding Benefits
+            // foreach ($request->benefits as $key => $value) {
+            //     $component = VacancyComponents::create([
+            //         "uuid" => $this->generateUuid(),
+            //         "vacancy_id" => $vacancy->id,
+            //         "ind" => "BENEFIT",
+            //         "status" => "Active",
+            //         "description" => $value['description'],
+            //         // "created_by"=>$request->created_by,
+            //         "created_on" => Carbon::now(),
+            //     ]);
+            // }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Vacancy $vacancy)
-    {
-        //
+            // // Adding why should work with us
+            // foreach ($request->why_work_with_us as $key => $value) {
+            //     $component = VacancyComponents::create([
+            //         "uuid" => $this->generateUuid(),
+            //         "vacancy_id" => $vacancy->id,
+            //         "ind" => "WHY_YOU_SHOULD_WORK_WITH_US",
+            //         "status" => "Active",
+            //         "description" => $value['description'],
+            //         // "created_by"=>$request->created_by,
+            //         "created_on" => Carbon::now(),
+            //     ]);
+            // }
+            DB::commit();
+            return $this->genericResponse(true, "Job created  successfully", 201, $vacancy);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
     }
 }

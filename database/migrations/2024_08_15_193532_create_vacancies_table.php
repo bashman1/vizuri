@@ -20,8 +20,15 @@ return new class extends Migration
             // $table->text('application')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('sector_id')->nullable();
-            $table->unsignedBigInteger('vacancy_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->timestamp('expires_on')->nullable();
             $table->string('status')->nullable();
+            $table->string('location')->nullable();
+            $table->string('department')->nullable();
+            $table->string('employment_type')->nullable();
+            $table->string('experience')->nullable();
+            $table->unsignedBigInteger('job_type_id')->nullable();
+            $table->text('footer')->nullable();
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->timestamp('start_on')->nullable();
