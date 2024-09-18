@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\UserController;
-use App\Models\VacancyComponents;
+use App\Http\Controllers\VacancyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +24,5 @@ Route::group(['middleware'=>["auth:api"]], function(){
     Route::get("get-sectors", [CompanyController::class, "getSectors"]);
     Route::get("get-companies", [CompanyController::class, "getCompaniesList"]);
     Route::get("get-company-details/{id}", [CompanyController::class, "getCompanyDetails"]);
-    Route::post("create-job", [VacancyComponents::class, "createVacancy"]);
+    Route::post("create-job", [VacancyController::class, "createVacancy"]);
  });

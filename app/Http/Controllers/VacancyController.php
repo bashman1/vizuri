@@ -39,57 +39,57 @@ class VacancyController extends Controller
                 "created_on" => Carbon::now(),
             ]);
 
-            // // Adding Requirements
-            // foreach ($request->requirements as $key => $value) {
-            //     $component = VacancyComponents::create([
-            //         "uuid" => $this->generateUuid(),
-            //         "vacancy_id" => $vacancy->id,
-            //         "ind" => "REQUIREMENT",
-            //         "status" => "Active",
-            //         "description" => $value['description'],
-            //         // "created_by"=>$request->created_by,
-            //         "created_on" => Carbon::now(),
-            //     ]);
-            // }
+             // Adding Requirements
+            foreach ($request->requirements as $key => $value) {
+                $component = VacancyComponents::create([
+                    "uuid" => $this->generateUuid(),
+                    "vacancy_id" => $vacancy->id,
+                    "ind" => "REQUIREMENT",
+                    "status" => "Active",
+                    "description" => $value['description'],
+                    // "created_by"=>$request->created_by,
+                    "created_on" => Carbon::now(),
+                ]);
+            }
 
-            // // Adding roles and responsibilities
-            // foreach ($request->roles_and_responsibilities as $key => $value) {
-            //     $component = VacancyComponents::create([
-            //         "uuid" => $this->generateUuid(),
-            //         "vacancy_id" => $vacancy->id,
-            //         "ind" => "ROLES_AND_RESPONSIBLY",
-            //         "status" => "Active",
-            //         "description" => $value['description'],
-            //         // "created_by"=>$request->created_by,
-            //         "created_on" => Carbon::now(),
-            //     ]);
-            // }
+            // Adding roles and responsibilities
+            foreach ($request->roles_and_responsibilities as $key => $value) {
+                $component = VacancyComponents::create([
+                    "uuid" => $this->generateUuid(),
+                    "vacancy_id" => $vacancy->id,
+                    "ind" => "ROLES_AND_RESPONSIBLY",
+                    "status" => "Active",
+                    "description" => $value['description'],
+                    // "created_by"=>$request->created_by,
+                    "created_on" => Carbon::now(),
+                ]);
+            }
 
-            // // Adding Benefits
-            // foreach ($request->benefits as $key => $value) {
-            //     $component = VacancyComponents::create([
-            //         "uuid" => $this->generateUuid(),
-            //         "vacancy_id" => $vacancy->id,
-            //         "ind" => "BENEFIT",
-            //         "status" => "Active",
-            //         "description" => $value['description'],
-            //         // "created_by"=>$request->created_by,
-            //         "created_on" => Carbon::now(),
-            //     ]);
-            // }
+            // Adding Benefits
+            foreach ($request->benefits as $key => $value) {
+                $component = VacancyComponents::create([
+                    "uuid" => $this->generateUuid(),
+                    "vacancy_id" => $vacancy->id,
+                    "ind" => "BENEFIT",
+                    "status" => "Active",
+                    "description" => $value['description'],
+                    // "created_by"=>$request->created_by,
+                    "created_on" => Carbon::now(),
+                ]);
+            }
 
-            // // Adding why should work with us
-            // foreach ($request->why_work_with_us as $key => $value) {
-            //     $component = VacancyComponents::create([
-            //         "uuid" => $this->generateUuid(),
-            //         "vacancy_id" => $vacancy->id,
-            //         "ind" => "WHY_YOU_SHOULD_WORK_WITH_US",
-            //         "status" => "Active",
-            //         "description" => $value['description'],
-            //         // "created_by"=>$request->created_by,
-            //         "created_on" => Carbon::now(),
-            //     ]);
-            // }
+            // Adding why should work with us
+            foreach ($request->why_work_with_us as $key => $value) {
+                $component = VacancyComponents::create([
+                    "uuid" => $this->generateUuid(),
+                    "vacancy_id" => $vacancy->id,
+                    "ind" => "WHY_YOU_SHOULD_WORK_WITH_US",
+                    "status" => "Active",
+                    "description" => $value['description'],
+                    // "created_by"=>$request->created_by,
+                    "created_on" => Carbon::now(),
+                ]);
+            }
             DB::commit();
             return $this->genericResponse(true, "Job created  successfully", 201, $vacancy);
         } catch (\Throwable $th) {
