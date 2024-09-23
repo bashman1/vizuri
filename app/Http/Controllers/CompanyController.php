@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanySize;
 use App\Models\Sector;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -93,6 +94,34 @@ class CompanyController extends Controller
          } catch (\Throwable $th) {
              return $this->genericResponse(false, $th->getMessage(), 500, $th);
          }
+    }
+
+    public function createCompanySize(Request $request){
+        try {
+            DB::beginTransaction();
+            $companySize = CompanySize::create([
+                "description"=>$request->description,
+                "min"=>$request->min,
+                "max"=>$request->max,
+                "status"=>"Active",
+                "created_on"=>Carbon::now(),
+                "created_by"=>1,
+            ]);
+
+             DB::commit();
+             return $this->genericResponse(true, "Company size created successfully", 201, $companySize);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+    public function getCompanySize(){
+        try {
+            $companySizes = CompanySize::where("status", "Active")->get();
+            return $this->genericResponse(true, "Company size created successfully", 201, $companySizes);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
     }
 
 }
