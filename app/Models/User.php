@@ -35,6 +35,15 @@ class User extends Authenticatable
         'updated_on',
         'updated_by',
         'email_verified_at',
+        'phone_number',
+        'alt_phone_number',
+        'address',
+        'zip_code',
+        'blog',
+        'linkedin',
+        'country_id',
+        'city_id',
+        'region_id'
     ];
 
     /**

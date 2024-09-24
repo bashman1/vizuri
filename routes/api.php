@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacancyController;
 use Illuminate\Http\Request;
@@ -29,4 +30,20 @@ Route::group(['middleware'=>["auth:api"]], function(){
     Route::post("create-company-size", [CompanyController::class, "createCompanySize"]);
     Route::get("company-size", [CompanyController::class, "getCompanySize"]);
     Route::post("update-company", [CompanyController::class, "updateCompanyProfile"]);
+
+    Route::post("create-country", [CountryController::class, "createCountry"]);
+    Route::get("get-countries", [CountryController::class, "getCountry"]);
+    Route::get("get-country-by-id/{id}", [CountryController::class, "getCountryById"]);
+    Route::post("create-region", [CountryController::class, "createRegion"]);
+
+    Route::get("get-region", [CountryController::class, "getRegions"]);
+    Route::get("get-region-by-id/{id}", [CountryController::class, "getRegionsById"]);
+    Route::get("get-region-by-country-id/{countryId}", [CountryController::class, "getRegionsByCountryId"]);
+
+    Route::post("create-city", [CountryController::class, "createCity"]);
+    Route::get("get-cities", [CountryController::class, "getCities"]);
+    Route::get("get-cities-by-id/{id}", [CountryController::class, "getCitiesById"]);
+    Route::get("get-cities-by-region-id/{regionId}", [CountryController::class, "getCitiesByRegionId"]);
+    Route::get("get-cities-by-country-id/{countryId}", [CountryController::class, "getCitiesByCountryId"]);
+
  });

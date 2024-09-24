@@ -23,6 +23,15 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->string('status')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('alt_phone_number')->nullable();
+            $table->string('address')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('blog')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->unsignedBigInteger('region_id')->nullable();
             $table->timestamp('created_on')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamp('updated_on')->nullable();
