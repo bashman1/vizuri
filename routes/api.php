@@ -28,4 +28,5 @@ Route::group(['middleware'=>["auth:api"]], function(){
     Route::get("get-jobs",[VacancyController::class, "getJobList"]);
     Route::post("create-company-size", [CompanyController::class, "createCompanySize"]);
     Route::get("company-size", [CompanyController::class, "getCompanySize"]);
+    Route::post("update-company", [CompanyController::class, "updateCompanyProfile"]);
  });

@@ -136,6 +136,11 @@ class VacancyController extends Controller
     }
 
 
+    public function test(Request $request){
+
+        return view("welcome", []);
+    }
+
 
     // public function getJobList(){
     //     try {
