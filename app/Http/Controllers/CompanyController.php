@@ -160,4 +160,28 @@ class CompanyController extends Controller
             return $this->genericResponse(false, $th->getMessage(), 500, $th);
         }
     }
+
+
+    public function getCompanyProfile($companyId)
+    {
+        try {
+
+            $sql = "SELECT C.id, C.uuid, C.name, C.description, C.address, C.p_o_box, C.sector_id, C.status,
+            C.created_on, C.created_at, C.updated_at, C.business_name, C.nature_of_business, C.company_size_id,
+            C.phone_number, C.alt_phone_number, C.email, C.zip_code, C.country_id, C.city_id, C.region_id,
+            S.name AS sector, z.min AS min_size, Z.max AS max_size, z.description AS size_description,
+            C.website, C.linkedin, C.headquarter, B.name AS country, R.name AS region, D.name AS city
+            FROM companies C
+            LEFT JOIN sectors S ON S.id = C.sector_id
+            LEFT JOIN company_sizes Z ON Z.id = C.company_size_id
+            LEFT JOIN countries B ON B.id = C.country_id
+            LEFT JOIN regions R ON R.id = C.region_id
+            LEFT JOIN cities D ON D.id = C.city_id WHERE C.id = $companyId ";
+
+            $companyData = DB::select($sql);
+            return $this->genericResponse(true, "Company profile", 200, $companyData);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
 }

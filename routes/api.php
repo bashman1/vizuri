@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacancyController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,5 +46,10 @@ Route::group(['middleware'=>["auth:api"]], function(){
     Route::get("get-cities-by-id/{id}", [CountryController::class, "getCitiesById"]);
     Route::get("get-cities-by-region-id/{regionId}", [CountryController::class, "getCitiesByRegionId"]);
     Route::get("get-cities-by-country-id/{countryId}", [CountryController::class, "getCitiesByCountryId"]);
+    Route::post("update-user-profile", [UserController::class, "updateUserProfile"]);
+    Route::get("get-company-profile/{id}", [CompanyController::class, "getCompanyProfile"]);
+    Route::get("get-user-profile/{id}", [UserController::class, "getUserProfile"]);
 
  });
+
+

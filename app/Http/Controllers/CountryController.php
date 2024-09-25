@@ -33,7 +33,7 @@ class CountryController extends Controller
     public function getCountry(){
         try {
             $country = Country::where("status", "Active")->get();
-            $this->genericResponse(true, "countries", 200, $country);
+            return $this->genericResponse(true, "countries", 200, $country);
         } catch (\Throwable $th) {
             return $this->genericResponse(false, $th->getMessage(), 500, $th);
         }
@@ -42,7 +42,7 @@ class CountryController extends Controller
     public function getCountryById($countryId){
         try {
             $country = Country::where(["id"=>$countryId, "status"=>"Active"])->get();
-            $this->genericResponse(true, "countries", 200, $country);
+            return $this->genericResponse(true, "countries", 200, $country);
         } catch (\Throwable $th) {
             return $this->genericResponse(false, $th->getMessage(), 500, $th);
         }
