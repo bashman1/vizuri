@@ -166,6 +166,30 @@ class CompanyController extends Controller
     {
         try {
 
+            // $sql = "SELECT C.id, C.uuid, C.name, C.description, C.address, C.p_o_box, C.sector_id, C.status,
+            // C.created_on, C.created_at, C.updated_at, C.business_name, C.nature_of_business, C.company_size_id,
+            // C.phone_number, C.alt_phone_number, C.email, C.zip_code, C.country_id, C.city_id, C.region_id,
+            // S.name AS sector, z.min AS min_size, Z.max AS max_size, z.description AS size_description,
+            // C.website, C.linkedin, C.headquarter, B.name AS country, R.name AS region, D.name AS city
+            // FROM companies C
+            // LEFT JOIN sectors S ON S.id = C.sector_id
+            // LEFT JOIN company_sizes Z ON Z.id = C.company_size_id
+            // LEFT JOIN countries B ON B.id = C.country_id
+            // LEFT JOIN regions R ON R.id = C.region_id
+            // LEFT JOIN cities D ON D.id = C.city_id WHERE C.id = $companyId ";
+
+            // $companyData = DB::select($sql);
+            $companyData = $this->getCompanyData($companyId);
+            return $this->genericResponse(true, "Company profile", 200, $companyData);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+
+
+    public function getCompanyData($companyId){
+        try {
             $sql = "SELECT C.id, C.uuid, C.name, C.description, C.address, C.p_o_box, C.sector_id, C.status,
             C.created_on, C.created_at, C.updated_at, C.business_name, C.nature_of_business, C.company_size_id,
             C.phone_number, C.alt_phone_number, C.email, C.zip_code, C.country_id, C.city_id, C.region_id,
@@ -178,10 +202,81 @@ class CompanyController extends Controller
             LEFT JOIN regions R ON R.id = C.region_id
             LEFT JOIN cities D ON D.id = C.city_id WHERE C.id = $companyId ";
 
-            $companyData = DB::select($sql);
-            return $this->genericResponse(true, "Company profile", 200, $companyData);
+            return DB::select($sql);
         } catch (\Throwable $th) {
             return $this->genericResponse(false, $th->getMessage(), 500, $th);
         }
     }
+
+
+    public function getCompanyJobs($companyId)
+    {
+        try {
+            // $sql = "SELECT V.id, V.uuid, V.title, V.description, V.user_id, V.sector_id, V.category_id, V.expires_on,
+            // V.status, V.location, V.department, V.employment_type, V.experience, V.job_type_id,
+            // V.footer, V.branch_id, V.company_id, V.start_on, V.ends_on, V.created_at,
+            // C.name AS company_name, S.name AS sector_name
+            // FROM vacancies V
+            // INNER JOIN companies C ON C.id = V.company_id
+            // INNER JOIN sectors S ON S.id = V.sector_id
+            // WHERE V.company_id = :companyId";
+
+            // $companyData = DB::select($sql, ['companyId' => $companyId]);
+            $companyData = $this->companyJobs($companyId);
+            return $this->genericResponse(true, "Company jobs", 200, $companyData);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+
+    public function companyJobs($companyId){
+        try {
+            $sql = "SELECT V.id, V.uuid, V.title, V.description, V.user_id, V.sector_id, V.category_id, V.expires_on,
+            V.status, V.location, V.department, V.employment_type, V.experience, V.job_type_id,
+            V.footer, V.branch_id, V.company_id, V.start_on, V.ends_on, V.created_at,
+            C.name AS company_name, S.name AS sector_name
+            FROM vacancies V
+            INNER JOIN companies C ON C.id = V.company_id
+            INNER JOIN sectors S ON S.id = V.sector_id
+            WHERE V.company_id = :companyId";
+
+            return DB::select($sql, ['companyId' => $companyId]);
+            // return $this->genericResponse(true, "Company jobs", 200, $companyData);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+
+    public function getUserCompanyDetails(){
+        try {
+            $user = auth()->user();
+            if(!isset($user->company_id)){
+                return $this->genericResponse(false, "Company details not found", 404, []);
+            }
+            $companyData = $this->getCompanyData($user->company_id);
+            return $this->genericResponse(true, "Company profile", 200, $companyData);
+
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+    public function getUserCompanyJobs(){
+        try {
+            $user = auth()->user();
+            if(!isset($user->company_id)){
+                return $this->genericResponse(false, "Company details not found", 404, []);
+            }
+            $companyData = $this->companyJobs($user->company_id);
+            return $this->genericResponse(true, "Company jobs", 200, $companyData);
+
+
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+
 }

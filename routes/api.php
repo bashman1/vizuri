@@ -49,6 +49,9 @@ Route::group(['middleware'=>["auth:api"]], function(){
     Route::post("update-user-profile", [UserController::class, "updateUserProfile"]);
     Route::get("get-company-profile/{id}", [CompanyController::class, "getCompanyProfile"]);
     Route::get("get-user-profile/{id}", [UserController::class, "getUserProfile"]);
+    Route::get("get-company-jobs/{id}", [CompanyController::class, "getCompanyJobs"]);
+    Route::get("get-user-company-details", [CompanyController::class, "getUserCompanyDetails"]);
+    Route::get("get-company-job", [CompanyController::class, "getUserCompanyJobs"]);
 
  });
 
