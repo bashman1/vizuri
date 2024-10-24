@@ -31,6 +31,13 @@ return new class extends Migration
             $table->text('footer')->nullable();
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
+
+            $table->string('contract_type')->nullable();
+            $table->string('bid_security')->nullable();
+            $table->text('about_company')->nullable();
+            $table->text('summary')->nullable();
+            $table->string('classification')->default('JOB');
+
             $table->timestamp('start_on')->nullable();
             $table->timestamp('ends_on')->nullable();
             $table->timestamp('created_on')->nullable();

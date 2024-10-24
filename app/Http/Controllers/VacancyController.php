@@ -39,6 +39,16 @@ class VacancyController extends Controller
                 "created_on" => Carbon::now(),
             ]);
 
+            if (isset($request->classification) && $request->classification == "TENDER") {
+                $vacancy->update([
+                    'classification' => $request->classification,
+                    'contract_type' => $request->contract_type,
+                    'bid_security' => $request->bid_security,
+                    'about_company' => $request->about_company,
+                    'summary' => $request->summary,
+                ]);
+            }
+
             // Adding Requirements
             foreach ($request->requirements as $key => $value) {
                 $component = VacancyComponents::create([
@@ -90,6 +100,22 @@ class VacancyController extends Controller
                     "created_on" => Carbon::now(),
                 ]);
             }
+
+            // adding qualifications
+            if (isset($request->qualifications)) {
+                foreach ($request->qualifications as $key => $value) {
+                    $component = VacancyComponents::create([
+                        "uuid" => $this->generateUuid(),
+                        "vacancy_id" => $vacancy->id,
+                        "ind" => "QUALIFICATIONS",
+                        "status" => "Active",
+                        "description" => $value['description'],
+                        // "created_by"=>$request->created_by,
+                        "created_on" => Carbon::now(),
+                    ]);
+                }
+            }
+
             DB::commit();
             return $this->genericResponse(true, "Job created  successfully", 201, $vacancy);
         } catch (\Throwable $th) {
@@ -99,11 +125,10 @@ class VacancyController extends Controller
     }
 
 
-    public function getJobList()
-    {
+    public function getVacancy($type){
         try {
             // Eager load related components in one query
-            $vacancies = Vacancy::where('status', 'Active')
+            $vacancies = Vacancy::where(['status'=>'Active', 'classification'=> $type])
                 ->with([
                     'components' => function ($query) {
                         $query->where('status', 'Active');
@@ -117,17 +142,33 @@ class VacancyController extends Controller
                 $roles_and_responsibilities = $vacancy->components->where('ind', 'ROLES_AND_RESPONSIBLY');
                 $benefits = $vacancy->components->where('ind', 'BENEFIT');
                 $why_work_with_us = $vacancy->components->where('ind', 'WHY_YOU_SHOULD_WORK_WITH_US');
+                $qualifications = $vacancy->components->where('ind', 'QUALIFICATIONS');
 
                 // Set the related data on the vacancy object
                 $vacancy->requirements = $requirements;
                 $vacancy->roles_and_responsibilities = $roles_and_responsibilities;
                 $vacancy->benefits = $benefits;
                 $vacancy->why_work_with_us = $why_work_with_us;
+                $vacancy->qualifications = $qualifications;
 
                 unset($vacancy->components);
 
                 $tempArray[] = $vacancy;
             }
+
+            return $tempArray;
+            // return $this->genericResponse(true, "Vacancy list", 200, $tempArray);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
+    }
+
+
+    public function getJobList()
+    {
+        try {
+
+            $tempArray= $this->getVacancy('JOB');
 
             return $this->genericResponse(true, "Vacancy list", 200, $tempArray);
         } catch (\Throwable $th) {
@@ -136,32 +177,21 @@ class VacancyController extends Controller
     }
 
 
-    public function test(Request $request){
+    public function getTenderList(){
+        try {
 
-        return view("welcome", []);
+            $tempArray= $this->getVacancy('TENDER');
+
+            return $this->genericResponse(true, "Vacancy list", 200, $tempArray);
+        } catch (\Throwable $th) {
+            return $this->genericResponse(false, $th->getMessage(), 500, $th);
+        }
     }
 
 
-    // public function getJobList(){
-    //     try {
-    //         $vacancies = Vacancy::where(["status"=>"Active"])->get();
-    //         $tempArray = Array();
-    //         foreach ($vacancies as $key => $value) {
-    //             $requirements = VacancyComponents::where(["vacancy_id"=>$value["id"], "ind"=>"REQUIREMENT", "status" => "Active"])->get();
-    //             $roles_and_responsibilities = VacancyComponents::where(["vacancy_id"=>$value["id"], "ind"=>"ROLES_AND_RESPONSIBLY", "status" => "Active"])->get();
-    //             $benefits = VacancyComponents::where(["vacancy_id"=>$value["id"], "ind"=>"BENEFIT", "status" => "Active"])->get();
-    //             $why_work_with_us = VacancyComponents::where(["vacancy_id"=>$value["id"], "ind"=>"WHY_YOU_SHOULD_WORK_WITH_US", "status" => "Active"])->get();
+    public function test(Request $request)
+    {
 
-    //             $value["requirements"] = $requirements ;
-    //             $value["roles_and_responsibilities"] = $roles_and_responsibilities ;
-    //             $value["benefits"] = $benefits ;
-    //             $value["why_work_with_us"] = $why_work_with_us ;
-
-    //             array_push($tempArray, $value);
-    //         }
-    //         return $this->genericResponse(true, "Company list", 200, $tempArray);
-    //     } catch (\Throwable $th) {
-    //         return $this->genericResponse(false, $th->getMessage(), 500, $th);
-    //     }
-    // }
+        return view("welcome", []);
+    }
 }
