@@ -53,7 +53,6 @@ Route::group(['middleware'=>["auth:api"]], function(){
     Route::get("get-user-company-details", [CompanyController::class, "getUserCompanyDetails"]);
     Route::get("get-company-job", [CompanyController::class, "getUserCompanyJobs"]);
     Route::get('get-tenders', [VacancyController::class, "getTenderList"]);
-
  });
 
 
